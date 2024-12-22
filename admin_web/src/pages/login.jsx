@@ -1,4 +1,5 @@
-import { useNavigate, useContext, useState } from "react";
+import {useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { AuthContext } from "../components/authProvider";
@@ -13,6 +14,8 @@ const Login = () => {
   const [error, setError] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -42,13 +45,21 @@ const Login = () => {
       if (response.status === 200) {
         console.log("here");
         const { accessToken, refreshToken } = response.data;
-        setAccessToken(accessToken);
+
+      const tokenExpiryTime = 1 / 24 / 60;
+        Cookies.set("accessToken", accessToken, {
+          secure: false,
+          sameSite: "Strict",
+          expires: tokenExpiryTime,
+        });
+
         Cookies.set("refreshToken", refreshToken, {
           secure: false,
           sameSite: "Strict",
           expires: 7,
         });
         enqueueSnackbar("Succesfull login", { variant: "success" });
+        navigate("/home");
       }
     } catch (e) {
       if (e.response && e.response.status === 401) {

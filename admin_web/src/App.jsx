@@ -3,7 +3,13 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import {useLocation, Routes, Route} from 'react-router-dom';
-import Login from './pages/login'
+import Sidebar from "./components/sideBar";
+import Login from './pages/login';
+import Home from './pages/home';
+import Users from './pages/users';
+import Circles from './pages/circles';
+import Reports from './pages/reports';
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,11 +20,19 @@ function App() {
   } 
 
   return (
-    <div className="flex flex-col min-h-screen max-w-screen">
+    <div className="flex flex-row min-h-screen max-w-screen">
+      {location.pathname !== "/login" && location.pathname !== "/forbidden" && <Sidebar/>}
+       <div className="flex-grow bg-gray-100">
       <Routes scrollRestoration={true}>
         <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/circles" element={<Circles />} />
+        <Route path="/reports" element={<Reports />} />
+
         <Route path="/forbidden" element={<Forbidden />} />
       </Routes>
+      </div>
     </div>
   );
 };
