@@ -1,8 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
+import UserBlacklistDetails from "./userBlacklistDetails";
 
 const UserDetails = ({ user, onClose }) => {
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showBlacklists, setShowBlacklists] = useState(false);
+  const [showCircles, setShowCircles] = useState(false);
+
   if (!user) {
     return null;
   }
@@ -13,6 +18,22 @@ const UserDetails = ({ user, onClose }) => {
       document.body.style.overflow = "auto";
     };
   }, []);
+
+  const handleShowBlacklists = () => {
+    setShowBlacklists(true);
+  };
+
+  const handleShowCircles = () => {
+    setShowCircles(true);
+  };
+
+  const closeBlacklists = () => {
+    setShowBlacklists(false);
+  };
+
+  const closeCircles = () => {
+    setShowCircles(false);
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
@@ -45,7 +66,6 @@ const UserDetails = ({ user, onClose }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <DetailItem label="ID" value={user.userId} />
-              <DetailItem label="Type" value={user.userType.toLowerCase()} />
               <DetailItem label="Date of Birth" value={user.dateOfBirth} />
               <DetailItem
                 label="Phone Number"
@@ -54,21 +74,27 @@ const UserDetails = ({ user, onClose }) => {
               <DetailItem
                 label="Blacklists"
                 value={
-                  <div className="flex items-center gap-2">
+                  <div
+                    onClick={handleShowBlacklists}
+                    className="flex items-center gap-2  cursor-pointer"
+                  >
                     <FaCircleInfo className="text-red-500" />
                     <span className="text-gray-700">Blacklist information</span>
                   </div>
                 }
               />
-              <DetailItem
+              {/* <DetailItem
                 label="Circles"
                 value={
-                  <div className="flex items-center gap-2">
+                  <div
+                    onClick={handleShowCircles}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
                     <FaCircleInfo className="text-blue-500" />
                     <span className="text-gray-700">Circle information</span>
                   </div>
                 }
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -82,6 +108,12 @@ const UserDetails = ({ user, onClose }) => {
           </button>
         </div>
       </div>
+      {showBlacklists && (
+        <UserBlacklistDetails user={user} onClose={closeBlacklists} />
+      )}
+      {showCircles && (
+        <UserCircleDetails user={user} onClose={closeCircles} />
+      )}
     </div>
   );
 };
