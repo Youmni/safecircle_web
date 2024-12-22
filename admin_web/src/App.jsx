@@ -9,6 +9,8 @@ import Home from './pages/home';
 import Users from './pages/users';
 import Circles from './pages/circles';
 import Reports from './pages/reports';
+import Events from './pages/events';
+
 
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
         <Route path="/users" element={<Users />} />
         <Route path="/circles" element={<Circles />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/events" element={<Events />} />
 
         <Route path="/forbidden" element={<Forbidden />} />
       </Routes>

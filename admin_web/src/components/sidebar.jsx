@@ -6,6 +6,7 @@ import {
   FiCircle,
   FiFileText,
   FiLogOut,
+  FiCalendar,
   FiChevronRight,
   FiChevronLeft,
 } from "react-icons/fi";
@@ -54,12 +55,20 @@ const SideBar = () => {
               {isOpen && <span>Circles</span>}</Link>
           </li>
 
-          <li>
+          {/* <li>
             <Link
               to="/reports"
               className="flex items-center gap-4 p-2 rounded-md hover:bg-navy-600 cursor-pointer"
             ><FiFileText size={24} />
               {isOpen && <span>Reports</span>}</Link>
+          </li> */}
+
+          <li>
+            <Link
+              to="/events"
+              className="flex items-center gap-4 p-2 rounded-md hover:bg-navy-600 cursor-pointer"
+            ><FiCalendar size={24} />
+              {isOpen && <span>Events</span>}</Link>
           </li>
         </ul>
       </div>

@@ -46,12 +46,12 @@ export const AuthProvider = ({ children }) => {
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
 
-      const tokenExpiryTime = 60 / 60;
+      const tokenExpiryTime = 1 / 24;
 
       Cookies.set("accessToken", accessToken, {
         secure: false, 
         sameSite: "Strict",
-        expires: 7,
+        expires: tokenExpiryTime,
       });
       Cookies.set("refreshToken", refreshToken, {
         secure: false,

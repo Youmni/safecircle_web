@@ -46,7 +46,7 @@ const Login = () => {
         console.log("here");
         const { accessToken, refreshToken } = response.data;
 
-      const tokenExpiryTime = 1 / 24 / 60;
+      const tokenExpiryTime = 1 / 24;
         Cookies.set("accessToken", accessToken, {
           secure: false,
           sameSite: "Strict",
