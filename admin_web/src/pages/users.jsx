@@ -37,7 +37,7 @@ const Users = () => {
         enqueueSnackbar("Error receiving users", { variant: "error" });
         setLoading(false);
       });
-  }, []);
+  }, [accessToken]);
 
   const handleRowClick = (user) => {
     setSelectedUser(user);

@@ -38,7 +38,7 @@ const Circles = () => {
         enqueueSnackbar("Error receiving circles", { variant: "error" });
         setLoading(false);
       });
-  }, []);
+  }, [accessToken]);
 
   const handleRowClick = (circle) => {
     setSelectedCircle(circle);

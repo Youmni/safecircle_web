@@ -18,6 +18,7 @@ const Home = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
+    if (!accessToken) return;
     setLoading(true);
     axios
       .get("api/statistics/numbers", {
@@ -63,6 +64,7 @@ const Home = () => {
   }, [accessToken]);
 
   useEffect(() => {
+    if (!accessToken) return;
     setLoading(true);
     axios
       .get("api/alert/latest", {

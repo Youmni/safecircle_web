@@ -58,6 +58,7 @@ const Login = () => {
           sameSite: "Strict",
           expires: 7,
         });
+        setAccessToken(accessToken);
         enqueueSnackbar("Succesfull login", { variant: "success" });
         navigate("/home");
       }

@@ -9,68 +9,61 @@ export const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(Cookies.get('accessToken') || null);
   const [refreshToken, setRefreshToken] = useState(Cookies.get('refreshToken') || null);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
-    if (!accessToken || !refreshToken) {
+    if (!accessToken && !refreshToken) {
       navigate('/login');
     }
-  }, [accessToken, refreshToken, navigate]);
+  }, [accessToken, refreshToken]);
 
   useEffect(() => {
-    const interceptor = axios.interceptors.request.use(
-      (config) => {
-        if (accessToken) {
-          config.headers['Authorization'] = `Bearer ${accessToken}`;
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error.response && error.response.status === 403 && refreshToken) {
+          try {
+            const newTokens = await refreshAccessToken();
+            setAccessToken(newTokens.accessToken);
+          } catch (refreshError) {
+            console.error('Error refreshing token:', refreshError);
+            setAccessToken(null);
+            setRefreshToken(null);
+            Cookies.remove('accessToken');
+            Cookies.remove('refreshToken');
+            navigate('/login');
+          }
         }
-        else{
-          navigate('/login');
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
+      }
     );
-
-    return () => {
-      axios.interceptors.request.eject(interceptor);
-    };
-  }, [accessToken]);
+  }, [accessToken, refreshToken]);
 
   const refreshAccessToken = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/user/refresh-token', {
-        refreshToken: refreshToken,
+      const response = await axios.post('/api/user/refresh-token', {
+        refreshToken,
       });
+      console.log('Access token refreshed:', response.data);
 
-      const { accessToken, refreshToken } = response.data;
-      console.log(accessToken);
-      setAccessToken(accessToken);
-      setRefreshToken(refreshToken);
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
+      Cookies.set('accessToken', newAccessToken, { expires: 1 / 24 }); 
+      Cookies.set('refreshToken', newRefreshToken, { expires: 7 }); 
 
-      const tokenExpiryTime = 1 / 24;
+      setAccessToken(newAccessToken);
+      setRefreshToken(newRefreshToken);
 
-      Cookies.set("accessToken", accessToken, {
-        secure: false, 
-        sameSite: "Strict",
-        expires: tokenExpiryTime,
-      });
-      Cookies.set("refreshToken", refreshToken, {
-        secure: false,
-        sameSite: "Strict",
-        expires: 7,
-      });
+      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
     } catch (error) {
       console.error('Error refreshing access token:', error);
-
-      setAccessToken(null);
-      setRefreshToken(null);
       Cookies.remove('accessToken');
       Cookies.remove('refreshToken');
       navigate('/login');
+      throw error;
     }
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken, refreshAccessToken, setRefreshToken }}>
+    <AuthContext.Provider value={{ accessToken, setAccessToken, refreshToken, setRefreshToken }}>
       {children}
     </AuthContext.Provider>
   );
