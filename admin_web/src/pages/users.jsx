@@ -34,7 +34,6 @@ const Users = () => {
       })
       .catch((e) => {
         console.log(e);
-        enqueueSnackbar("Error receiving users", { variant: "error" });
         setLoading(false);
       });
   }, [accessToken]);

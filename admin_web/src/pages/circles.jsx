@@ -35,7 +35,6 @@ const Circles = () => {
       })
       .catch((e) => {
         console.log(e);
-        enqueueSnackbar("Error receiving circles", { variant: "error" });
         setLoading(false);
       });
   }, [accessToken]);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
 import CircleUserDetails from "./CircleUserDetails";
+import moment from "moment";
 
 const CircleDetails = ({ circle, onClose }) => {
 
@@ -19,6 +20,10 @@ const CircleDetails = ({ circle, onClose }) => {
     setShowUserDetails(false);
   };
   
+  const formatDate = (date) => {
+    return moment(date).format("DD MMMM YYYY hh:mm");
+  };
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -48,8 +53,8 @@ const CircleDetails = ({ circle, onClose }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <DetailItem label="ID" value={circle.circleId} />
                   <DetailItem label="Type" value={circle.circleType.toLowerCase()} />
-                  <DetailItem label="Created At" value={circle.createdAt} />
-                  <DetailItem label="Updated At" value={circle.updatedAt} />
+                  <DetailItem label="Created At" value={formatDate(circle.createdAt)} />
+                  <DetailItem label="Updated At" value={formatDate(circle.updatedAt)} />
 
                   <DetailItem
                     label="Users"

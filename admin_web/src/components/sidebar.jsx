@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import {
   FiHome,
   FiUsers,
@@ -13,6 +14,13 @@ import {
 
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Cookies.remove("refreshToken");
+    Cookies.remove("accessToken");
+    navigate("/login");
+  };
 
   return (
     <div
@@ -61,16 +69,6 @@ const SideBar = () => {
             </Link>
           </li>
 
-          {/* <li>
-            <Link
-              to="/reports"
-              className="flex items-center gap-4 p-2 rounded-md hover:bg-navy-600 cursor-pointer"
-            >
-              <FiFileText size={24} />
-              {isOpen && <span>Reports</span>}
-            </Link>
-          </li> */}
-
           <li>
             <Link
               to="/events"
@@ -81,6 +79,16 @@ const SideBar = () => {
             </Link>
           </li>
         </ul>
+      </div>
+
+      <div className="mt-auto">
+        <button
+          onClick={handleLogout}
+          className="flex items-center w-full gap-4 p-4 hover:bg-red-600 cursor-pointer"
+        >
+          <FiLogOut size={24} />
+          {isOpen && <span>Logout</span>}
+        </button>
       </div>
     </div>
   );

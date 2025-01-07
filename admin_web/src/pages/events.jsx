@@ -34,7 +34,6 @@ const Events = () => {
       })
       .catch((e) => {
         console.log(e);
-        enqueueSnackbar("Error receiving events", { variant: "error" });
         setLoading(false);
       });
   }, [accessToken]);
@@ -74,7 +73,7 @@ const Events = () => {
     setFilteredEvents(updatedFilteredEvents);
 
     axios
-      .put(`/api/event/status/${eventId}?eventStatus=${newStatus}`, {}, {
+      .patch(`/api/event/status/${eventId}?newStatus=${newStatus}`, {}, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
+import moment from "moment";
 import axios from "axios";
 import { AuthContext } from "../components/authProvider";
 
@@ -65,6 +66,10 @@ const EventDetails = ({ event, onClose }) => {
     }
   };
 
+  const formatDate = (date) => {
+    return moment(date).format("DD MMMM YYYY hh:mm");
+  };
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -94,8 +99,8 @@ const EventDetails = ({ event, onClose }) => {
                 <DetailItem label="ID" value={event.eventId} />
                 <DetailItem label="Type" value={event.eventStatus.toLowerCase()} />
                 <DetailItem label="Email" value={event.email} />
-                <DetailItem label="Start Date" value={event.startDate} />
-                <DetailItem label="End Date" value={event.endDate} />
+                <DetailItem label="Start Date" value={formatDate(event.startDate)} />
+                <DetailItem label="End Date" value={formatDate(event.endDate)} />
                 <DetailItem
                   label="Location"
                   value={
@@ -109,20 +114,6 @@ const EventDetails = ({ event, onClose }) => {
                     </a>
                   }
                 />
-                <div className="p-4 bg-gray-100 rounded-lg">
-                  <button
-                    onClick={handleAddCircle}
-                    className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                  >
-                    Add Circle
-                  </button>
-                  <button
-                    onClick={handleDeleteCircle}
-                    className="py-2 px-4 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ml-4"
-                  >
-                    Delete Circle
-                  </button>
-                </div>
               </div>
             </div>
 
